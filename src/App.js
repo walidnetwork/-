@@ -61,12 +61,10 @@ async function extractRefText(file, aroundPage) {
     const page = await pdf.getPage(p);
     const tc = await page.getTextContent();
     text += tc.items.map(i => i.str).join(" ") + " ";
-    if (text.length > 5000) break;
-  }
-  return text.substring(0, 5000);
+     if (text.length > 5000) break;
+    }
+    return text.substring(0, 5000);
 }
-
-/* ══ GEMINI API ══ */
 async function callGemini(prompt, apiKey) {
   const res = await fetch(, {
     method: "POST",
