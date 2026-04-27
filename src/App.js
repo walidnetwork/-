@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 
-const LOGO = "iVBORw0KGgoAAAANSUhEUgAABZ4AAAWeCAYAAADg6jCeAAAAUGVYSWZNTQAqAAAACAAEAQAABAAAAAEAAAAAAQEABAAAAAEAAAAAh2kABAAAAAEAAAA+ARIABAAAAAEAAAAAAAAAAAABkggABAAAAAEAAAAAAAAAALFNWc4AAAqOaVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8P3hwYWNrZXQgYmVnaW49Ij8iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgVGVzdC5TTkFQU0hPVCI+CiAgPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICAgIDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiCiAgICAgICAgeG1sbnM6QXR0cmliPSJodHRwOi8vbnMuYXR0cmlidXRpb24uY29tL2Fkcy8xLjAvIj4KICAgICAgPEF0dHJpYjpBZHM+CiAgICAgICAgPHJkZjpTZXE+CiAgICAgICAgICA8cmRmOmxpCiAgICAgICAgICAgIEF0dHJpYjpGYklkPSI1MjUyNjU5MTQxNzk1ODAiCiAgICAgICAgICAgIEF0dHJpYjpDcmVhdGVkPSI/Pz8/LT8/LT8/IgogICAgICAgICAgICBBdHRyaWI6VG91Y2hUeXBlPSIyIgogICAgICAgICAgICBBdHRyaWI6RXh0SWQ9IjliMmQ1Mjc4LWJjNmEtNDA0YS05NGRmLTViNzdlMjU1NmMzOSIvPgogICAgICAgIDwvcmRmOlNlcT4KICAgICAgPC9BdHRyaWI6QWRzPgogICAgPC9yZGY6RGVzY3JpcHRpb24+CiAgPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAg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";
+const LOGO = "iVBORw0KGgoAAAANSUhEUgAABZ4AAAWeCAYAAADg6jCeAAAAUGVYSWZNTQAqAAAACAAEAQAABAAAAAEAAAAAAQEABAAAAAEAAAAAh2kABAAAAAEAAAA+ARIABAAAAAEAAAAAAAAAAAABkggABAAAAAEAAAAAAAAAALFNWc4AAAqOaVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8P3hwYWNrZXQgYmVnaW49Ij8iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgVGVzdC5TTkFQU0hPVCI+CiAgPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICAgIDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiCiAgICAgICAgeG1sbnM6QXR0cmliPSJodHRwOi8vbnMuYXR0cmlidXRpb24uY29tL2Fkcy8xLjAvIj4KICAgICAgPEF0dHJpYjpBZHM+CiAgICAgICAgPHJkZjpTZXE+CiAgICAgICAgICA8cmRmOmxpCiAgICAgICAgICAgIEF0dHJpYjpGYklkPSI1MjUyNjU5MTQxNzk1ODAiCiAgICAgICAgICAgIEF0dHJpYjpDcmVhdGVkPSI/Pz8/LT8/LT8/IgogICAgICAgICAgICBBdHRyaWI6VG91Y2hUeXBlPSIyIgogICAgICAgICAgICBBdHRyaWI6RXh0SWQ9IjliMmQ1Mjc4LWJjNmEtNDA0YS05NGRmLTViNzdlMjU1NmMzOSIvPgogICAgICAgIDwvcmRmOlNlcT4KICAgICAgPC9BdHRyaWI6QWRzPgogICAgPC9yZGY6RGVzY3JpcHRpb24+CiAgPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgIAo8P3hwYWNrZXQgZW5kPSJ3Ij8+1cJPTwAAAAFzUkdCAK7OHOkAAAAEc0JJVAgICAh8CGSIAAAgAElEQVR4nOzdeZydZXk//ut+zixZWcIW9qBBMJJkwkgmEVGsC2BdEGVxqRLUql2U1lqwVYu11tqvYqG/aqmYCSAuiApqEUEBQUsiYBI2ZQ0gCCQGSMg+c57798cwIUGRLDPznDPzfr9eeSWTOTnnE8gk5/mc61x3BAAAAAAAAAAAAAAA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";
 const TEACHER_PASSWORD = "hero2026";
 const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
 
@@ -19,7 +19,7 @@ const GRADES = [
 const PDFJS_CDN    = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";
 const PDFJS_WORKER = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
-const CSS = "\n  * { box-sizing: border-box; margin: 0; padding: 0; }\n  body { font-family: Cairo, sans-serif; background: #07080f; color: #e2e8f0; }\n  ::-webkit-scrollbar { width: 5px; }\n  ::-webkit-scrollbar-track { background: #080c14; }\n  ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }\n .fade-in { animation: fi.35s ease both; }\n  @keyframes fi { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }\n .spin { display:inline-block; animation: sp 1.2s linear infinite; }\n  @keyframes sp { to { transform: rotate(360deg); } }\n .btn { border:none; border-radius:10px; font-family:Cairo,sans-serif; font-weight:700; cursor:pointer; transition:all.2s; display:inline-flex; align-items:center; gap:6px; font-size:14px; }\n .btn:active { transform: scale(.97); }\n .card { background:#0f172a; border:1px solid #1e293b; border-radius:14px; }\n .q-card { padding:16px; border-radius:12px; cursor:pointer; transition:all.2s; border:1px solid #1e293b; margin-bottom:10px; }\n .q-card:hover { border-color: #334155; }\n .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:#1e293b; border:1px solid #34d399; color:#34d399; padding:12px 20px; border-radius:10px; font-size:13px; font-weight:700; z-index:999; white-space:nowrap; }\n  input[type=number], input[type=text], input[type=password] { background:#0d1117; border:1px solid #30363d; border-radius:10px; color:#e6edf3; font-family:Cairo,sans-serif; font-size:16px; padding:12px 16px; width:100%; outline:none; transition:border.2s; }\n  input:focus { border-color: #f7971e; }\n";
+const CSS = "\n  * { box-sizing: border-box; margin: 0; padding: 0; }\n  body { font-family: Cairo, sans-serif; background: #07080f; color: #e2e8f0; }\n  ::-webkit-scrollbar { width: 5px; }\n  ::-webkit-scrollbar-track { background: #080c14; }\n  ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }\n.fade-in { animation: fi.35s ease both; }\n  @keyframes fi { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }\n.spin { display:inline-block; animation: sp 1.2s linear infinite; }\n  @keyframes sp { to { transform: rotate(360deg); } }\n.btn { border:none; border-radius:10px; font-family:Cairo,sans-serif; font-weight:700; cursor:pointer; transition:all.2s; display:inline-flex; align-items:center; gap:6px; font-size:14px; }\n.btn:active { transform: scale(.97); }\n.card { background:#0f172a; border:1px solid #1e293b; border-radius:14px; }\n.q-card { padding:16px; border-radius:12px; cursor:pointer; transition:all.2s; border:1px solid #1e293b; margin-bottom:10px; }\n.q-card:hover { border-color: #334155; }\n.toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:#1e293b; border:1px solid #34d399; color:#34d399; padding:12px 20px; border-radius:10px; font-size:13px; font-weight:700; z-index:999; white-space:nowrap; }\n  input[type=number], input[type=text], input[type=password] { background:#0d1117; border:1px solid #30363d; border-radius:10px; color:#e6edf3; font-family:Cairo,sans-serif; font-size:16px; padding:12px 16px; width:100%; outline:none; transition:border.2s; }\n  input:focus { border-color: #f7971e; }\n";
 
 async function loadPdfJs() {
   if (window.pdfjsLib) return window.pdfjsLib;
@@ -60,7 +60,6 @@ async function extractRefText(file, aroundPage) {
   return text.substring(0, 5000);
 }
 
-// دالة الاتصال المحدثة مع دعم JSON
 async function callGemini(prompt, apiKey, imageBase64, isJson = false) {
   const parts =;
   if (imageBase64) {
@@ -120,7 +119,7 @@ export default function App() {
       <div style={{ flex:1 }}>
         {mode === "teacher"? (
           teacherAuth
-           ? <TeacherPanel files={files} setFiles={setFiles} apiKey={apiKey} saveApiKey={saveApiKey} />
+          ? <TeacherPanel files={files} setFiles={setFiles} apiKey={apiKey} saveApiKey={saveApiKey} />
             : <TeacherLogin pwInput={pwInput} setPwInput={setPwInput} pwError={pwError} onLogin={handleTeacherLogin} />
         ) : (
           <StudentApp files={files} apiKey={apiKey} />
@@ -184,7 +183,7 @@ function TeacherPanel({ files, setFiles, apiKey, saveApiKey }) {
 
   const setFile = (gid, term, type, f) => {
     setFiles(p => ({
-     ...p,
+    ...p,
       [gid]: {...p[gid], ["term" + term]: {...(p[gid]? p[gid]["term" + term] : {}), [type]: f } }
     }));
     showToast("تم رفع " + f.name + " بنجاح");
@@ -193,7 +192,7 @@ function TeacherPanel({ files, setFiles, apiKey, saveApiKey }) {
   const total = GRADES.reduce((acc, g) =>
     acc +.[1, 2]reduce((a, t) =>
       a + (files[g.id] && files[g.id]["term"+t] && files[g.id]["term"+t].book? 1 : 0)
-        + (files[g.id] && files[g.id]["term"+t] && files[g.id]["term"+t].ref ? 1 : 0), 0), 0);
+        + (files[g.id] && files[g.id]["term"+t] && files[g.id]["term"+t].ref? 1 : 0), 0), 0);
 
   return (
     <div style={{ maxWidth:960, margin:"0 auto", padding:"24px 20px" }}>
@@ -236,7 +235,7 @@ function TeacherPanel({ files, setFiles, apiKey, saveApiKey }) {
               {GRADES.filter(g => g.level === lv).map(g => {
                 const up =.[1, 2]reduce((a,t) =>
                   a + (files[g.id] && files[g.id]["term"+t] && files[g.id]["term"+t].book? 1 : 0)
-                    + (files[g.id] && files[g.id]["term"+t] && files[g.id]["term"+t].ref ? 1 : 0), 0);
+                    + (files[g.id] && files[g.id]["term"+t] && files[g.id]["term"+t].ref? 1 : 0), 0);
                 return (
                   <div key={g.id} onClick={() => setSelGrade(g)}
                     style={{ padding:"9px 11px", borderRadius:9, cursor:"pointer", marginBottom:3, transition:"all.2s",
@@ -286,7 +285,7 @@ function TeacherPanel({ files, setFiles, apiKey, saveApiKey }) {
                       color: f? "#94a3b8" : "#fff", border: f? "1px solid #1e293b" : "none" }}>
                       {f? "تغيير" : "رفع PDF"}
                       <input type="file" accept=".pdf" style={{ display:"none" }}
-                        onChange={e => e.target.files && setFile(selGrade.id, selTerm, type, e.target.files)} />
+                        onChange={e => e.target.files && e.target.files && setFile(selGrade.id, selTerm, type, e.target.files)} />
                     </label>
                   </div>
                 </div>
@@ -342,7 +341,6 @@ function StudentApp({ files, apiKey }) {
     setPageLoad(false);
   };
 
-  // دالة الاستخراج المحدثة مع خوارزمية التنظيف الآمنة
   const extractQuestions = async (pn) => {
     if (!bookFile) return;
     setQLoad(true);
@@ -356,10 +354,8 @@ function StudentApp({ files, apiKey }) {
       const imgBase64 = result.dataUrl.replace("data:image/png;base64,", "");
       const prompt = "This is a page from an Egyptian school English language textbook (evaluation/exercise book). Look at the image carefully and extract ALL questions, exercises, and fill-in-the-blank items. Include question numbers if visible. Return ONLY a valid JSON array: [{\"id\":1,\"text\":\"question text here\"},{\"id\":2,\"text\":\"...\"}]. No markdown, no explanation, ONLY the JSON array.";
       
-      // نمرر true لفرض صيغة JSON في مخرجات Gemini
       const raw = await callGemini(prompt, apiKey, imgBase64, true);
       
-      // تنظيف السلسلة من أي علامات Markdown زائدة
       let jsonStr = raw.trim();
       const fenceRegex = /^```(?:json)?\s*\n?(.*?)\n?\s*```$/s;
       const match = jsonStr.match(fenceRegex);
@@ -368,11 +364,9 @@ function StudentApp({ files, apiKey }) {
       }
 
       try {
-        // التحليل المباشر بعد التنظيف
         const parsed = JSON.parse(jsonStr);
         setQuestions(Array.isArray(parsed)? parsed :);
       } catch (e) {
-        // خوارزمية استرجاعية (Fallback) في حالة الفشل
         const jsonMatch = jsonStr.match(/\*\}\s*\]/);
         if (jsonMatch) {
           const parsedFallback = JSON.parse(jsonMatch);
@@ -535,7 +529,7 @@ function StudentApp({ files, apiKey }) {
       <div style={{ display:"grid", gridTemplateColumns:"1fr 400px", gap:16, alignItems:"start" }}>
         <div className="card" style={{ padding:10, position:"sticky", top:80 }}>
           {pageImg
-           ? <img src={pageImg} alt="page" style={{ width:"100%", borderRadius:8, display:"block" }} />
+          ? <img src={pageImg} alt="page" style={{ width:"100%", borderRadius:8, display:"block" }} />
             : <div style={{ height:400, display:"flex", alignItems:"center", justifyContent:"center", color:"#475569" }}>جاري التحميل...</div>}
         </div>
 
