@@ -65,8 +65,8 @@ async function extractRefText(file, aroundPage) {
     }
     return text.substring(0, 5000);
 }
+
 async function callGemini(prompt, apiKey) {
-  const res = await fetch(, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
