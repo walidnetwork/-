@@ -67,12 +67,17 @@ async function extractRefText(file, aroundPage) {
   return text.substring(0, 5000);
 }
 
-async function callGemini(prompt, apiKey) {
+async function callGemini(prompt, apiKey, imageBase64) {
+  const parts = [];
+  if (imageBase64) {
+    parts.push({ inline_data: { mime_type: "image/png", data: imageBase64 } });
+  }
+  parts.push({ text: prompt });
   const res = await fetch(GEMINI_URL + "?key=" + apiKey, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
+      contents: [{ parts }],
       generationConfig: { maxOutputTokens: 1000, temperature: 0.3 }
     })
   });
@@ -337,18 +342,23 @@ function StudentApp({ files, apiKey }) {
     if (!bookFile) return;
     setQLoad(true);
     try {
-      const text = await extractPageText(bookFile, pn);
-      if (!text.trim()) { setQuestions([]); setQLoad(false); return; }
       if (!apiKey) {
         setQuestions([{ id:1, text:"يرجى اضافة Gemini API Key في لوحة المعلم" }]);
         setQLoad(false); return;
       }
-      const prompt = "This is text from an Egyptian school English language textbook. Extract ALL questions or exercises. Return ONLY a valid JSON array like: [{id:1,text:question},{id:2,text:...}]. No markdown, no explanation.\n\nText:\n" + text.substring(0, 3000);
-      const raw = await callGemini(prompt, apiKey);
-      const clean = raw.replace(/^[`][`][`][\w]*\n?/gm, "").replace(/[`][`][`]$/gm, "").trim();
-      const parsed = JSON.parse(clean);
-      setQuestions(Array.isArray(parsed) ? parsed : []);
-    } catch(e) { setQuestions([]); }
+      const result = await renderPdfPage(bookFile, pn);
+      if (!result) { setQuestions([]); setQLoad(false); return; }
+      const imgBase64 = result.dataUrl.replace("data:image/png;base64,", "");
+      const prompt = "This is a page from an Egyptian school English language textbook (evaluation/exercise book). Look at the image carefully and extract ALL questions, exercises, and fill-in-the-blank items. Include question numbers if visible. Return ONLY a valid JSON array: [{\"id\":1,\"text\":\"question text here\"},{\"id\":2,\"text\":\"...\"}]. No markdown, no explanation, ONLY the JSON array.";
+      const raw = await callGemini(prompt, apiKey, imgBase64);
+      const jsonMatch = raw.match(/\[\s*\{[\s\S]*\}\s*\]/);
+      if (jsonMatch) {
+        const parsed = JSON.parse(jsonMatch[0]);
+        setQuestions(Array.isArray(parsed) ? parsed : []);
+      } else {
+        setQuestions([]);
+      }
+    } catch(e) { console.error(e); setQuestions([]); }
     setQLoad(false);
   };
 
