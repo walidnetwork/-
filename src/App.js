@@ -69,20 +69,16 @@ async function extractRefText(file, aroundPage) {
 async function callGemini(prompt, apiKey) {
     const res = await fetch(GEMINI_API_URL + "?key=" + apiKey, {
         method: "POST",
-      generationConfig: { maxOutputTokens: 1000, temperature: 0.3 }
-    })
-  });
-  const data = await res.json();
-  if (data.error) throw new Error(data.error.message);
-  return data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: { maxOutputTokens: 1000, temperature: 0.3 }
+        })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    return data.candidates?.[0]?.content?.parts?.[0]?.text || "";
 }
-
-/* ══ CSS ══ */
-const CSS = ;
-
-/* ══ ROOT APP ══ */
-export default function App() {
-  const [mode, setMode] = useState("student");
   const [files, setFiles] = useState({});
   const [apiKey, setApiKey] = useState(localStorage.getItem("gemini_key") || "");
   const [teacherAuth, setTeacherAuth] = useState(false);
