@@ -82,7 +82,7 @@ async function callGemini(prompt, apiKey, imageBase64) {
 export default function App() {
   const [mode, setMode] = useState("student");
   const [files, setFiles] = useState({});
-  const [apiKey, setApiKey] = useState(localStorage.getItem("gemini_key") || "");
+  const [apiKey, setApiKey] = useState(localStorage.getItem("gemini_key") || "AIzaSyCn2crAaz0tmW3Auf7qA3rxwXfUQqbxSnY");
   const [teacherAuth, setTeacherAuth] = useState(false);
   const [pwInput, setPwInput] = useState("");
   const [pwError, setPwError] = useState("");
