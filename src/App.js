@@ -67,8 +67,7 @@ async function extractRefText(file, aroundPage) {
 }
 
 async function callGemini(prompt, apiKey) {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+    const res = await fetch(GEMINI_API_URL + "?key=" + apiKey, {
     body: JSON.stringify({
       contents: [{ parts: [{ text: prompt }] }],
       generationConfig: { maxOutputTokens: 1000, temperature: 0.3 }
