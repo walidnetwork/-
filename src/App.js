@@ -44,14 +44,7 @@ async function renderPdfPage(file, pageNum) {
   return { dataUrl: canvas.toDataURL("image/png"), totalPages: pdf.numPages };
 }
 
-async function extractPageText(file, pageNum) {
-  const lib = await loadPdfJs();
-  const pdf = await lib.getDocument({ data: await file.arrayBuffer() }).promise;
-  if (pageNum < 1 || pageNum > pdf.numPages) return "";
-  const page = await pdf.getPage(pageNum);
-  const tc = await page.getTextContent();
-  return tc.items.map(i => i.str).join(" ");
-}
+
 
 async function extractRefText(file, aroundPage) {
   const lib = await loadPdfJs();
