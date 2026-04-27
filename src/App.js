@@ -19,7 +19,7 @@ const GRADES = [
 const PDFJS_CDN    = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";
 const PDFJS_WORKER = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
-const CSS = "\n  * { box-sizing: border-box; margin: 0; padding: 0; }\n  body { font-family: Cairo, sans-serif; background: #07080f; color: #e2e8f0; }\n  ::-webkit-scrollbar { width: 5px; }\n  ::-webkit-scrollbar-track { background: #080c14; }\n  ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }\n.fade-in { animation: fi.35s ease both; }\n  @keyframes fi { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }\n.spin { display:inline-block; animation: sp 1.2s linear infinite; }\n  @keyframes sp { to { transform: rotate(360deg); } }\n.btn { border:none; border-radius:10px; font-family:Cairo,sans-serif; font-weight:700; cursor:pointer; transition:all.2s; display:inline-flex; align-items:center; gap:6px; font-size:14px; }\n.btn:active { transform: scale(.97); }\n.card { background:#0f172a; border:1px solid #1e293b; border-radius:14px; }\n.q-card { padding:16px; border-radius:12px; cursor:pointer; transition:all.2s; border:1px solid #1e293b; margin-bottom:10px; }\n.q-card:hover { border-color: #334155; }\n.toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:#1e293b; border:1px solid #34d399; color:#34d399; padding:12px 20px; border-radius:10px; font-size:13px; font-weight:700; z-index:999; white-space:nowrap; }\n  input[type=number], input[type=text], input[type=password] { background:#0d1117; border:1px solid #30363d; border-radius:10px; color:#e6edf3; font-family:Cairo,sans-serif; font-size:16px; padding:12px 16px; width:100%; outline:none; transition:border.2s; }\n  input:focus { border-color: #f7971e; }\n";
+const CSS = "\n  * { box-sizing: border-box; margin: 0; padding: 0; }\n  body { font-family: Cairo, sans-serif; background: #07080f; color: #e2e8f0; }\n  ::-webkit-scrollbar { width: 5px; }\n  ::-webkit-scrollbar-track { background: #080c14; }\n  ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }\n .fade-in { animation: fi.35s ease both; }\n  @keyframes fi { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }\n .spin { display:inline-block; animation: sp 1.2s linear infinite; }\n  @keyframes sp { to { transform: rotate(360deg); } }\n .btn { border:none; border-radius:10px; font-family:Cairo,sans-serif; font-weight:700; cursor:pointer; transition:all.2s; display:inline-flex; align-items:center; gap:6px; font-size:14px; }\n .btn:active { transform: scale(.97); }\n .card { background:#0f172a; border:1px solid #1e293b; border-radius:14px; }\n .q-card { padding:16px; border-radius:12px; cursor:pointer; transition:all.2s; border:1px solid #1e293b; margin-bottom:10px; }\n .q-card:hover { border-color: #334155; }\n .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:#1e293b; border:1px solid #34d399; color:#34d399; padding:12px 20px; border-radius:10px; font-size:13px; font-weight:700; z-index:999; white-space:nowrap; }\n  input[type=number], input[type=text], input[type=password] { background:#0d1117; border:1px solid #30363d; border-radius:10px; color:#e6edf3; font-family:Cairo,sans-serif; font-size:16px; padding:12px 16px; width:100%; outline:none; transition:border.2s; }\n  input:focus { border-color: #f7971e; }\n";
 
 async function loadPdfJs() {
   if (window.pdfjsLib) return window.pdfjsLib;
@@ -60,6 +60,7 @@ async function extractRefText(file, aroundPage) {
   return text.substring(0, 5000);
 }
 
+// الدالة المحدثة مع خيار إرجاع JSON إجباري
 async function callGemini(prompt, apiKey, imageBase64, isJson = false) {
   const parts =;
   if (imageBase64) {
@@ -71,7 +72,7 @@ async function callGemini(prompt, apiKey, imageBase64, isJson = false) {
   if (isJson) {
     generationConfig.responseMimeType = "application/json";
   }
-  
+
   const res = await fetch(GEMINI_URL + "?key=" + apiKey, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -119,7 +120,7 @@ export default function App() {
       <div style={{ flex:1 }}>
         {mode === "teacher"? (
           teacherAuth
-          ? <TeacherPanel files={files} setFiles={setFiles} apiKey={apiKey} saveApiKey={saveApiKey} />
+           ? <TeacherPanel files={files} setFiles={setFiles} apiKey={apiKey} saveApiKey={saveApiKey} />
             : <TeacherLogin pwInput={pwInput} setPwInput={setPwInput} pwError={pwError} onLogin={handleTeacherLogin} />
         ) : (
           <StudentApp files={files} apiKey={apiKey} />
@@ -183,7 +184,7 @@ function TeacherPanel({ files, setFiles, apiKey, saveApiKey }) {
 
   const setFile = (gid, term, type, f) => {
     setFiles(p => ({
-    ...p,
+     ...p,
       [gid]: {...p[gid], ["term" + term]: {...(p[gid]? p[gid]["term" + term] : {}), [type]: f } }
     }));
     showToast("تم رفع " + f.name + " بنجاح");
@@ -192,7 +193,7 @@ function TeacherPanel({ files, setFiles, apiKey, saveApiKey }) {
   const total = GRADES.reduce((acc, g) =>
     acc +.[1, 2]reduce((a, t) =>
       a + (files[g.id] && files[g.id]["term"+t] && files[g.id]["term"+t].book? 1 : 0)
-        + (files[g.id] && files[g.id]["term"+t] && files[g.id]["term"+t].ref? 1 : 0), 0), 0);
+        + (files[g.id] && files[g.id]["term"+t] && files[g.id]["term"+t].ref ? 1 : 0), 0), 0);
 
   return (
     <div style={{ maxWidth:960, margin:"0 auto", padding:"24px 20px" }}>
@@ -235,7 +236,7 @@ function TeacherPanel({ files, setFiles, apiKey, saveApiKey }) {
               {GRADES.filter(g => g.level === lv).map(g => {
                 const up =.[1, 2]reduce((a,t) =>
                   a + (files[g.id] && files[g.id]["term"+t] && files[g.id]["term"+t].book? 1 : 0)
-                    + (files[g.id] && files[g.id]["term"+t] && files[g.id]["term"+t].ref? 1 : 0), 0);
+                    + (files[g.id] && files[g.id]["term"+t] && files[g.id]["term"+t].ref ? 1 : 0), 0);
                 return (
                   <div key={g.id} onClick={() => setSelGrade(g)}
                     style={{ padding:"9px 11px", borderRadius:9, cursor:"pointer", marginBottom:3, transition:"all.2s",
@@ -285,7 +286,7 @@ function TeacherPanel({ files, setFiles, apiKey, saveApiKey }) {
                       color: f? "#94a3b8" : "#fff", border: f? "1px solid #1e293b" : "none" }}>
                       {f? "تغيير" : "رفع PDF"}
                       <input type="file" accept=".pdf" style={{ display:"none" }}
-                        onChange={e => e.target.files && e.target.files && setFile(selGrade.id, selTerm, type, e.target.files)} />
+                        onChange={e => e.target.files && setFile(selGrade.id, selTerm, type, e.target.files)} />
                     </label>
                   </div>
                 </div>
@@ -341,6 +342,7 @@ function StudentApp({ files, apiKey }) {
     setPageLoad(false);
   };
 
+  // الدالة المحدثة مع آلية التنظيف
   const extractQuestions = async (pn) => {
     if (!bookFile) return;
     setQLoad(true);
@@ -529,7 +531,7 @@ function StudentApp({ files, apiKey }) {
       <div style={{ display:"grid", gridTemplateColumns:"1fr 400px", gap:16, alignItems:"start" }}>
         <div className="card" style={{ padding:10, position:"sticky", top:80 }}>
           {pageImg
-          ? <img src={pageImg} alt="page" style={{ width:"100%", borderRadius:8, display:"block" }} />
+           ? <img src={pageImg} alt="page" style={{ width:"100%", borderRadius:8, display:"block" }} />
             : <div style={{ height:400, display:"flex", alignItems:"center", justifyContent:"center", color:"#475569" }}>جاري التحميل...</div>}
         </div>
 
