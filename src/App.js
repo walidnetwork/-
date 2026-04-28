@@ -339,19 +339,44 @@ function StudentApp({ files, apiKey }) {
         setQuestions([{ id:1, text:"يرجى اضافة Gemini API Key في لوحة المعلم" }]);
         setQLoad(false); return;
       }
-      const result = await renderPdfPage(bookFile, pn);
-      if (!result) { setQuestions([]); setQLoad(false); return; }
-      const imgBase64 = result.dataUrl.replace("data:image/png;base64,", "");
-      const prompt = "This is a page from an Egyptian school English language textbook (evaluation/exercise book). Look at the image carefully and extract ALL questions, exercises, and fill-in-the-blank items. Include question numbers if visible. Return ONLY a valid JSON array: [{\"id\":1,\"text\":\"question text here\"},{\"id\":2,\"text\":\"...\"}]. No markdown, no explanation, ONLY the JSON array.";
-      const raw = await callGemini(prompt, apiKey, imgBase64);
-      const jsonMatch = raw.match(/\[\s*\{[\s\S]*\}\s*\]/);
+
+      // render small image for AI (scale 1 + JPEG compressed)
+      const lib = await loadPdfJs();
+      const pdf = await lib.getDocument({ data: await bookFile.arrayBuffer() }).promise;
+      if (pn < 1 || pn > pdf.numPages) { setQuestions([]); setQLoad(false); return; }
+      const page = await pdf.getPage(pn);
+      const vp = page.getViewport({ scale: 1.2 });
+      const canvas = document.createElement("canvas");
+      canvas.width = vp.width;
+      canvas.height = vp.height;
+      await page.render({ canvasContext: canvas.getContext("2d"), viewport: vp }).promise;
+      const smallImg = canvas.toDataURL("image/jpeg", 0.7);
+      const imgBase64 = smallImg.replace("data:image/jpeg;base64,", "");
+
+      const prompt = "You are analyzing a page from an Egyptian school English language textbook. Extract ALL questions, exercises, and tasks visible in this image. Each question should be complete. Return ONLY a JSON array with no extra text: [{"id":1,"text":"full question text"},{"id":2,"text":"..."}]";
+
+      const res = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + apiKey, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [
+            { inline_data: { mime_type: "image/jpeg", data: imgBase64 } },
+            { text: prompt }
+          ]}],
+          generationConfig: { maxOutputTokens: 2000, temperature: 0.1 }
+        })
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error.message);
+      const raw = data.candidates[0].content.parts[0].text || "";
+      const jsonMatch = raw.match(/\[[\s\S]*\]/);
       if (jsonMatch) {
         const parsed = JSON.parse(jsonMatch[0]);
         setQuestions(Array.isArray(parsed) ? parsed : []);
       } else {
         setQuestions([]);
       }
-    } catch(e) { console.error(e); setQuestions([]); }
+    } catch(e) { console.error("Extract error:", e); setQuestions([]); }
     setQLoad(false);
   };
 
