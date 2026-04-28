@@ -43,7 +43,7 @@ async function geminiVision(base64Img, prompt, apiKey) {
   const models = [
     "gemini-1.5-pro-latest",
     "gemini-1.5-flash",
-    "gemini-2.0-flash"
+    "gemini-1.5-flash"
   ];
   let lastErr = null;
   for (const model of models) {
@@ -108,7 +108,7 @@ async function getAnswerFromImage(base64Img, question, type, grade, refBase64, a
   }
   parts.push({ text: prompt });
 
-  const models = ["gemini-1.5-pro-latest", "gemini-1.5-flash", "gemini-2.0-flash"];
+  const models = ["gemini-1.5-pro-latest", "gemini-1.5-flash", "gemini-1.5-flash"];
   let lastErr = null;
   for (const model of models) {
     try {
