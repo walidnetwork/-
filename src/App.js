@@ -95,34 +95,9 @@ async function extractQuestionsFromImage(base64Img, apiKey) {
 async function getAnswerFromImage(base64Img, question, type, grade, refBase64, apiKey) {
   let prompt = "";
   if (type === "answer") {
-    prompt = "You are an expert Egyptian school English teacher for " + grade + ".
-
-" +
-      "Question from the textbook: " + question + "
-
-" +
-      "Give ONLY the correct answer in Arabic (1-2 sentences maximum).
-" +
-      "Keep English words/answers in English.
-" +
-      "Be direct and concise.";
+    prompt = "You are an expert Egyptian school English teacher for " + grade + ". Question from the textbook: " + question + ". Give ONLY the correct answer in Arabic (1-2 sentences maximum). Keep English words in English. Be direct and concise.";
   } else {
-    prompt = "You are an expert Egyptian school English teacher for " + grade + ".
-
-" +
-      "Question from the textbook: " + question + "
-
-" +
-      "Explain in Arabic clearly and simply:
-" +
-      "1. الإجابة الصحيحة (بالإنجليزي)
-" +
-      "2. السبب أو القاعدة النحوية أو معنى الكلمة
-" +
-      "3. مثال مفيد إن أمكن
-
-" +
-      "Keep English terms in English. Be encouraging and age-appropriate.";
+    prompt = "You are an expert Egyptian school English teacher for " + grade + ". Question from the textbook: " + question + ". Explain in Arabic: 1. الاجابة الصحيحة بالانجليزي 2. السبب او القاعدة النحوية او معنى الكلمة 3. مثال مفيد. Keep English terms in English. Be encouraging.";
   }
 
   const parts = [
