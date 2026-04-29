@@ -362,7 +362,6 @@ function StudentApp({ files }) {
 
   const tKey     = "term"+term;
   const bookFile = grade&&files[grade.id]&&files[grade.id][tKey]?files[grade.id][tKey].book:null;
-  const refFile  = grade&&files[grade.id]&&files[grade.id][tKey]?files[grade.id][tKey].ref:null;
 
   const reset = () => {
     setStep("term"); setTerm(null); setGrade(null); setPageNum(""); setPageImg(null); setPageB64(null);
